@@ -4,6 +4,13 @@ Created on Fri Oct 23 11:33:33 2026
 
 @author: franc
 """
+
+"""
+Les instructions pour jouer s'affichent dans le terminal.
+A chaque tour, on a le choix entre miner ou poser un drapeau. 
+Il faut entrer m pour miner et d pour poser un drapeau.
+On doit ensuite entrer le numéro de la ligne et colonne où l'on veut agir.
+"""
 import numpy as np
 import random
 import sys
@@ -181,15 +188,15 @@ class Drapeau():
         
         
 if __name__ == "__main__":
-    #Jouer dans la console
+    
+    # ---- Jouer dans la console ---- #
     '''
     g = Grille(10,10)
     J = JeuDeDemineur(g)
     J.Jeu()
     '''
     
-    
-    #Jouer avec l'interface graphique
+    # ---- Jouer avec l'interface graphique ---- #
     app = QApplication.instance() or QApplication(sys.argv)
     g = Grille(10, 10)
     fen = Interface_Grille(g)

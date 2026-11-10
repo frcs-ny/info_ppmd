@@ -8,6 +8,11 @@ Created on Mon Nov  2 09:11:57 2026
 from PyQt5.QtCore import Qt
 from PyQt5.QtWidgets import QWidget, QPushButton, QGridLayout, QMessageBox
 
+"""
+Commandes :
+Clique droit pour poser un drapeau
+Clique Gauche pour miner
+"""
 
 class BoutonCase(QPushButton):
     '''case cliquable'''
@@ -49,7 +54,7 @@ class Interface_Grille(QWidget):
         if self.fini == True:
             return
         case = self.grille.cases[ligne, colonne]
-        #on ne peux pas cliquer sur in drapeau
+        #on ne peut pas cliquer sur un drapeau
         if case.etat == "drapeau":
             return
         #on perd si on clique sur une mine
@@ -88,7 +93,7 @@ class Interface_Grille(QWidget):
             for j in range(self.grille.colonnes):
                 case = self.grille.cases[i, j]
                 bouton = self.boutons[i][j]
-                #si la case est dévoilé, on vérifie si c'est une mine, sinon on affiche le nombre de mines ajacentes
+                #si la case est dévoilée, on vérifie si c'est une mine, sinon on affiche le nombre de mines ajacentes
                 if case.etat == "dévoilé":
                     if case.mine is not None:
                         bouton.setText("X")
@@ -101,7 +106,7 @@ class Interface_Grille(QWidget):
                         else : 
                             bouton.setText("")
                             bouton.setStyleSheet("background-color: white;")
-                #si la case n'est pas dévoilé, on verifie si c'est un drapeau, et sinon on affiche rien
+                #si la case n'est pas dévoilée, on verifie si c'est un drapeau, et sinon on affiche rien
                 elif case.etat == "drapeau":
                     bouton.setText("F")
                     bouton.setStyleSheet("color: red")
