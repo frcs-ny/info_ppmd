@@ -40,27 +40,21 @@ class JeuDeDemineur():
     
         
 class Grille():
-    def __init__(self, largeur, hauteur):
-
-        self.largeur = largeur
-        self.hauteur = hauteur
-
+    def __init__(self, colonnes, lignes):
+        self.colonnes = colonnes
+        self.lignes = lignes
         # Initialisation des mines
         mines = []
-
-        while len(mines) < hauteur:
-            pos = Position(
-                random.randint(0, largeur - 1),
-                random.randint(0, hauteur - 1)
-            )
+        while len(mines) < lignes:
+            pos = Position(random.randint(0, colonnes - 1),random.randint(0, lignes - 1))                               
             # Vérification que la position n'est pas déjà utilisée
             if not any(m.position == pos for m in mines):
                 mines.append(Mine(pos))
                 
         #On crée ensuite les cases
-        cases = np.zeros((hauteur,largeur),dtype = Case)
-        for i in range(hauteur):
-            for j in range(largeur):
+        cases = np.zeros((lignes,colonnes),dtype = Case)
+        for i in range(lignes):
+            for j in range(colonnes):
                 cases[i,j] = Case(None,'caché',None)
                 for k in range(len(mines)):
                     if (j,i) == (mines[k].position.x,mines[k].position.y):
@@ -68,15 +62,15 @@ class Grille():
         self.cases = cases
         
         # Calcul des mines adjacentes
-        for i in range(hauteur):
-            for j in range(largeur):
+        for i in range(lignes):
+            for j in range(colonnes):
                 self.cases[i][j].mines_adjacentes = (
                     self.compter_mines(i, j)
                 )
     def est_valide(self, ligne, colonne):
         return (
-            0 <= ligne < self.hauteur
-            and 0 <= colonne < self.largeur
+            0 <= ligne < self.lignes
+            and 0 <= colonne < self.colonnes
         )
 
     def voisins(self, ligne, colonne):
@@ -98,20 +92,14 @@ class Grille():
     def devoiler(self, ligne, colonne):
         # Dévoilement automatique des cases voisines
         a_visiter = [(ligne, colonne)]
-
         while a_visiter:
             i, j = a_visiter.pop()
-
             case = self.cases[i][j]
-
             if case.etat != "caché":
                 continue
-
             if case.mine is not None:
                 continue
-
             case.etat = "dévoilé"
-
             # Si la case ne touche aucune mine,
             # on dévoile également ses voisines.
             if case.mines_adjacentes == 0:
@@ -122,8 +110,8 @@ class Grille():
         
     def afficher(self):
         affichage = ""
-        for i in range(self.hauteur):
-            for j in range(self.largeur):
+        for i in range(self.lignes):
+            for j in range(self.colonnes):
                 if self.cases[i,j].etat == "dévoilé":
                     if self.cases[i,j].mine == None:
                         affichage += '[' + str(self.cases[i,j].mines_adjacentes) + ']'
@@ -142,8 +130,8 @@ class Grille():
         
     def afficher_mines(self):
         affichage = ""
-        for i in range(self.hauteur):
-            for j in range(self.largeur):
+        for i in range(self.lignes):
+            for j in range(self.colonnes):
                 if self.cases[i,j].mine == None:
                         affichage += '[ ]'
                 else:
@@ -156,11 +144,11 @@ class Grille():
 
     def placer_drapeau(self, ligne, colonne):
         case = self.cases[ligne][colonne]
-
+        #cliquer sur un case ajouter un drapeau
         if case.etat == "caché":
             case.etat = "drapeau"
             print("Drapeau posé !\n")
-
+        #recliquer sur cette même case enleve le drapeau
         elif case.etat == "drapeau":
             case.etat = "caché"
             print("Drapeau retiré !\n")
@@ -193,25 +181,21 @@ class Drapeau():
         
         
 if __name__ == "__main__":
+    #Jouer dans la console
+    '''
     g = Grille(10,10)
     J = JeuDeDemineur(g)
+    J.Jeu()
+    '''
     
-    app = QApplication.instance()
-
-    if app is None:
-        app = QApplication(sys.argv)
-
+    
+    #Jouer avec l'interface graphique
+    app = QApplication.instance() or QApplication(sys.argv)
     g = Grille(10, 10)
-
     fen = Interface_Grille(g)
-
     fen.show()
-
     app.exec_()
     
-    J.Jeu()
-        
-        
         
         
         
